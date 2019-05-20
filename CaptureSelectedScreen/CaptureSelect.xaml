@@ -1,0 +1,84 @@
+﻿<Window x:Class="CaptureSelectedScreen.CaptureSelect"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:CaptureSelectedScreen"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d"
+        Title=""
+        Height="300"
+        Width="300"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        Topmost="True"
+        MouseMove="OnMouseMove"
+        MouseLeftButtonDown="OnMouseLeftButtonDown"
+        MouseLeftButtonUp="OnMouseLeftButtonUp"
+        MouseRightButtonUp="OnMouseRightButtonUp"
+        x:Name="workPannel"
+        Background="#01000000">
+    <Window.DataContext>
+        <vm:CaptureSelectVM/>
+    </Window.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding OnLoaded}"
+                                   CommandParameter="{Binding ElementName=workPannel}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Activated">
+            <i:InvokeCommandAction Command="{Binding OnActivated}"
+                                   CommandParameter="{Binding ElementName=workPannel}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="GotFocus">
+            <i:InvokeCommandAction Command="{Binding OnActivated}"
+                                   CommandParameter="{Binding ElementName=workPannel}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding OnClosed}"
+                                   CommandParameter="{Binding ElementName=workPannel}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.InputBindings>
+        <KeyBinding Key="Esc"
+                    Command="{Binding OnCaptureCancel}" />
+    </Window.InputBindings>
+    <Canvas>
+        <Line X1="{Binding MouseX,UpdateSourceTrigger=PropertyChanged}"
+              X2="{Binding MouseX,UpdateSourceTrigger=PropertyChanged}"
+              Y1="0"
+              Y2="{Binding Path=ActualHeight,ElementName=workPannel}"
+              Stroke="#FF2EFB00"
+              StrokeThickness="2" />
+        <Line X1="0"
+              X2="{Binding Path=ActualWidth,ElementName=workPannel}"
+              Y1="{Binding MouseY,UpdateSourceTrigger=PropertyChanged}"
+              Y2="{Binding MouseY,UpdateSourceTrigger=PropertyChanged}"
+              Stroke="#FF2EFB00"
+              StrokeThickness="2"/>
+
+        <Line X1="{Binding MouseX2,UpdateSourceTrigger=PropertyChanged}"
+              X2="{Binding MouseX2,UpdateSourceTrigger=PropertyChanged}"
+              Y1="0"
+              Y2="{Binding Path=ActualHeight,ElementName=workPannel}"
+              Stroke="#FF2EFB00"
+              StrokeThickness="2" />
+        <Line X1="0"
+              X2="{Binding Path=ActualWidth,ElementName=workPannel}"
+              Y1="{Binding MouseY2,UpdateSourceTrigger=PropertyChanged}"
+              Y2="{Binding MouseY2,UpdateSourceTrigger=PropertyChanged}"
+              Stroke="#FF2EFB00"
+              StrokeThickness="2" />
+
+        <Rectangle Fill="Transparent"
+                   StrokeThickness="2"
+                   Stroke="Red" 
+                   Canvas.Top="{Binding CaptureTop}"
+                   Canvas.Left="{Binding CaptureLeft}"
+                   Width="{Binding CaptureWidth}"
+                   Height="{Binding CaptureHeight}"
+                   Visibility="{Binding Captured,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+    </Canvas>
+</Window>
